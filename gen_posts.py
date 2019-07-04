@@ -15,6 +15,13 @@ def gen_posts():
         entry_title = entry["title"] + ".markdown"
         filename = re.sub(r'[\/:"*?<>|]+', '', entry_title)
         with open(os.path.join("_posts", filename), "w") as out:
+            layout = f"""
+---
+layout: post
+title: "{entry_title}"
+---
+""".lstrip()
+            out.write(layout)
             out.write(html2text.html2text(entry["content"][0]["value"]))
 
 if __name__ == "__main__":
