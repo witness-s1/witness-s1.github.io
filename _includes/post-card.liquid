@@ -4,7 +4,7 @@
     <h3 class='c-post-card__title'>{{ post.title }}</h3>
 
     <p class='c-post-card__excerpt u-font-medium'>
-      {{ post.content | strip_html | truncatewords:35 }}
+      {{ post.content | strip_html | truncate: 35 }}
     </p>
 
     <span class='c-post-card__date'>{{ post.date | date: '%d %b %Y' }}</span>

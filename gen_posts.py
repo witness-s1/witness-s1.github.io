@@ -3,6 +3,7 @@ import feedparser
 import argparse
 import re
 import os
+from datetime import datetime, timedelta
 
 def gen_posts():
     parser = argparse.ArgumentParser()
@@ -11,15 +12,19 @@ def gen_posts():
 
     url = f"https://caraba1st.com/tid-{args.feed_id}.xml"
     feed = feedparser.parse(url)
-    for entry in feed["entries"]:
-        entry_title = entry["title"] + ".markdown"
-        filename = re.sub(r'[\/:"*?<>|]+', '', entry_title)
+    time_now = datetime.now()
+    for idx, entry in enumerate(feed["entries"]):
+        title = re.sub(r'[\/:"*?<>|]+', '', entry["title"]) 
+        filename = time_now.strftime(f"%Y-%m-%d-{title}.md")
+        delta = timedelta(minutes=idx)
         with open(os.path.join("_posts", filename), "w") as out:
             layout = f"""
 ---
 layout: post
-title: "{entry_title}"
+title: "{entry["title"]}"
+date: {time_now - delta}
 ---
+
 """.lstrip()
             out.write(layout)
             out.write(html2text.html2text(entry["content"][0]["value"]))
